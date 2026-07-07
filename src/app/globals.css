@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  /* Blueprint Archive color system — a real cyanotype/drafting palette,
+     deliberately its own identity rather than a CIVION reskin. The paper
+     IS the background: deep Prussian blue, not another near-black void. */
+  --bp-indigo-deep: #0f2847; /* the paper */
+  --bp-indigo-void: #081826; /* deepest recesses, vignette floor */
+  --bp-linework: #cfe8f3; /* pencil/ink — all technical linework, dimension marks, grid */
+  --bp-brass: #c9a15f; /* aged instrument metal — hover/active accent, used sparingly */
+  --bp-graphite-ink: #1b2733; /* UI chrome sitting "on top of" the paper */
+  --bp-warn-rust: #b5654a; /* rare — errors/warnings only, never decorative */
+}
+
+@theme inline {
+  --color-indigo-deep: var(--bp-indigo-deep);
+  --color-indigo-void: var(--bp-indigo-void);
+  --color-linework: var(--bp-linework);
+  --color-brass: var(--bp-brass);
+  --color-graphite-ink: var(--bp-graphite-ink);
+  --color-warn-rust: var(--bp-warn-rust);
+
+  --font-display: var(--font-plex-mono);
+  --font-body: var(--font-plex-sans);
+}
+
+html {
+  scroll-behavior: auto; /* Lenis takes over scrolling, native smooth-behavior would conflict */
+}
+
+body {
+  background: var(--bp-indigo-deep);
+  color: var(--bp-linework);
+  font-family: var(--font-body);
+}
+
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
+::selection {
+  background: var(--bp-brass);
+  color: var(--bp-indigo-void);
+}
+
+/* Fixed technical grid, the "paper" texture — used behind the cover sheet
+   and as a faint ambient backdrop; never opaque enough to fight content. */
+.bp-grid {
+  background-image: linear-gradient(rgba(207, 232, 243, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 232, 243, 0.07) 1px, transparent 1px);
+  background-size: 38px 38px;
+}
+
+.bp-grid-fine {
+  background-image: linear-gradient(rgba(207, 232, 243, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(207, 232, 243, 0.04) 1px, transparent 1px);
+  background-size: 9.5px 9.5px;
+}
+
+@keyframes bp-grid-drift {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 38px 38px;
+  }
+}
+
+.animate-bp-grid-drift {
+  animation: bp-grid-drift 8s linear infinite;
+}
