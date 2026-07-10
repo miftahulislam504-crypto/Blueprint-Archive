@@ -3,7 +3,7 @@
 import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { CORRIDOR_START_Z, DESK_Z } from "@/scenes/sheetLayout";
+import { COVER_Z, DESK_Z } from "@/scenes/sheetLayout";
 
 /**
  * Sparse drafting-dust suspended through the whole corridor depth — gives
@@ -18,7 +18,7 @@ export default function VoidField({ count }: { count: number }) {
 
   const geometry = useMemo(() => {
     const positions = new Float32Array(count * 3);
-    const depthSpan = CORRIDOR_START_Z - DESK_Z + 20;
+    const depthSpan = COVER_Z - DESK_Z + 20;
     for (let i = 0; i < count; i++) {
       positions[i * 3 + 0] = (Math.random() - 0.5) * 26;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 14;

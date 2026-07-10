@@ -2,8 +2,9 @@
 
 import { Canvas } from "@react-three/fiber";
 import BlueprintCameraRig from "@/scenes/BlueprintCameraRig";
-import CoverSheet from "@/scenes/CoverSheet";
-import ArchiveSheets from "@/scenes/ArchiveSheets";
+import ArchiveRibbon from "@/scenes/ArchiveRibbon";
+import CoverPanel from "@/scenes/CoverPanel";
+import RibbonPanels from "@/scenes/RibbonPanels";
 import VoidField from "@/scenes/VoidField";
 import InstrumentParticles from "@/scenes/InstrumentParticles";
 import ArchiveEffects from "@/scenes/ArchiveEffects";
@@ -35,8 +36,9 @@ export default function ArchiveScene() {
         <fog attach="fog" args={["#081826", 12, 46]} />
         <BlueprintCameraRig />
 
-        <CoverSheet />
-        <ArchiveSheets />
+        <ArchiveRibbon />
+        <CoverPanel />
+        <RibbonPanels />
         <VoidField count={voidCount} />
         <InstrumentParticles count={instrumentCount} />
 

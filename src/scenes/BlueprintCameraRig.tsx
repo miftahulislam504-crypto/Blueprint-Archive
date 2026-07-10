@@ -7,23 +7,33 @@ import { gsap, ScrollTrigger } from "@/utils/gsap";
 import { useIntroState } from "@/hooks/useIntroState";
 import { useProjectSelection } from "@/hooks/useProjectSelection";
 import { PROJECTS } from "@/data/projects";
-import { SHEET_TRANSFORMS, COVER_Z, DESK_Z } from "@/scenes/sheetLayout";
+import {
+  RIBBON_X,
+  CAMERA_X_OFFSET,
+  PANEL_TRANSFORMS,
+  COVER_TRANSFORM,
+  DESK_Z,
+} from "@/scenes/sheetLayout";
 
 /**
- * BlueprintCameraRig — one continuous camera path down the corridor.
+ * BlueprintCameraRig — one continuous camera path flying alongside the
+ * ribbon.
  *
- * Flow: Cover sheet (close-up, pulls back) → the archive itself (visits
- * each sheet in turn, scroll-driven) → the instrument desk (pulls back to
- * reveal the full particle field).
+ * Flow: Cover panel (close-up, pulls back to flying distance) → every
+ * project panel in turn, scroll-driven → the instrument desk (pulls back
+ * to reveal the full particle field).
  *
  * Waypoints anchor to real section IDs so positions don't shift if a
- * section's height changes — same reasoning as CIVION's WorldCameraRig.
- * Sheet waypoints reuse the exact cameraPosition/cameraLookAt computed in
- * sheetLayout.ts, so the rig and the rendered sheets can never disagree
- * about where a sheet actually is.
+ * section's height changes. Panel waypoints reuse the exact
+ * cameraPosition/cameraLookAt computed in sheetLayout.ts, so the rig and
+ * the rendered panels can never disagree about where a panel actually is.
  */
 
-const PATH_PRE_START = new THREE.Vector3(0, 1.2, COVER_Z + 5);
+const PATH_PRE_START = new THREE.Vector3(
+  RIBBON_X + CAMERA_X_OFFSET + 5,
+  COVER_TRANSFORM.y + 1.2,
+  COVER_TRANSFORM.z + 5
+);
 
 type Waypoint = {
   pos: THREE.Vector3;
@@ -34,36 +44,36 @@ type Waypoint = {
 
 const COVER_WAYPOINTS: Waypoint[] = [
   {
-    pos: new THREE.Vector3(0, 0.4, COVER_Z + 2.2),
-    lookAt: new THREE.Vector3(0, 0.2, COVER_Z),
+    pos: new THREE.Vector3(RIBBON_X + 1.6, COVER_TRANSFORM.y + 0.15, COVER_TRANSFORM.z),
+    lookAt: new THREE.Vector3(RIBBON_X, COVER_TRANSFORM.y, COVER_TRANSFORM.z),
     anchorId: "cover",
     anchorFraction: 0.15,
   },
   {
-    pos: new THREE.Vector3(0, 1.1, COVER_Z + 4.5),
-    lookAt: new THREE.Vector3(0, 0.1, COVER_Z - 2),
+    pos: COVER_TRANSFORM.cameraPosition,
+    lookAt: COVER_TRANSFORM.cameraLookAt,
     anchorId: "cover",
     anchorFraction: 0.92,
   },
 ];
 
-const SHEET_WAYPOINTS: Waypoint[] = PROJECTS.map((_, i) => ({
-  pos: SHEET_TRANSFORMS[i].cameraPosition,
-  lookAt: SHEET_TRANSFORMS[i].cameraLookAt,
+const PANEL_WAYPOINTS: Waypoint[] = PROJECTS.map((_, i) => ({
+  pos: PANEL_TRANSFORMS[i].cameraPosition,
+  lookAt: PANEL_TRANSFORMS[i].cameraLookAt,
   anchorId: `sheet-${i}`,
   anchorFraction: 0.5,
 }));
 
 const DESK_WAYPOINTS: Waypoint[] = [
   {
-    pos: new THREE.Vector3(0, 0.6, DESK_Z + 6),
-    lookAt: new THREE.Vector3(0, 0, DESK_Z),
+    pos: new THREE.Vector3(RIBBON_X, 0.6, DESK_Z + 6),
+    lookAt: new THREE.Vector3(RIBBON_X, 0, DESK_Z),
     anchorId: "desk",
     anchorFraction: 0.1,
   },
   {
-    pos: new THREE.Vector3(0, 3.4, DESK_Z + 9),
-    lookAt: new THREE.Vector3(0, 0, DESK_Z),
+    pos: new THREE.Vector3(RIBBON_X, 3.4, DESK_Z + 9),
+    lookAt: new THREE.Vector3(RIBBON_X, 0, DESK_Z),
     anchorId: "desk",
     anchorFraction: 0.9,
   },
@@ -71,12 +81,12 @@ const DESK_WAYPOINTS: Waypoint[] = [
 
 const WAYPOINTS: Waypoint[] = [
   ...COVER_WAYPOINTS,
-  ...SHEET_WAYPOINTS,
+  ...PANEL_WAYPOINTS,
   ...DESK_WAYPOINTS,
 ];
 
 const ARRIVAL_DURATION = 2.4;
-const PARALLAX_STRENGTH = new THREE.Vector2(1.4, 0.9);
+const PARALLAX_STRENGTH = new THREE.Vector2(1.1, 0.7);
 const LOOK_SMOOTHING = 0.07;
 
 const positionCurve = new THREE.CatmullRomCurve3(
@@ -158,14 +168,17 @@ export default function BlueprintCameraRig() {
 
     if (selected) {
       const idx = PROJECTS.findIndex((p) => p.id === selected.id);
-      const t = idx >= 0 ? SHEET_TRANSFORMS[idx] : null;
+      const t = idx >= 0 ? PANEL_TRANSFORMS[idx] : null;
       if (t) {
-        // Tour position already sits at sheet_z + 3.4 (in front of the
-        // sheet, along the corridor's direction of travel) — closing in
-        // for inspection means *shrinking* that gap, i.e. subtracting
-        // here, not adding, or the "zoom in" click would instead pull the
-        // camera further away from the sheet.
-        focusTarget.current.copy(t.cameraPosition).setZ(t.cameraPosition.z - 0.8);
+        // Zooming in now means closing the gap to the wall (reducing the
+        // X offset), not adjusting Z — the panel's Z position is already
+        // exactly where the camera should be looking, since the camera
+        // flies alongside the ribbon rather than approaching it head-on.
+        focusTarget.current.set(
+          RIBBON_X + CAMERA_X_OFFSET * 0.55,
+          t.cameraPosition.y,
+          t.cameraPosition.z
+        );
         focusLookAt.current.copy(t.cameraLookAt);
       }
     }

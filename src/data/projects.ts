@@ -1,7 +1,7 @@
 /**
  * The Archive's actual contents — every sheet in the scroll is a real,
  * shipped project. No placeholder copy. `glyph` selects which procedural
- * line-art category ArchiveSheet draws (see scenes/glyphs.ts); `seed`
+ * line-art category RibbonPanel draws (see scenes/glyphs.ts); `seed`
  * drives the per-sheet procedural variation (dimension-line placement,
  * hatch density, registration-mark style) so no two sheets read the same
  * way when scrolling past — the same lesson Igloo learned with their ice

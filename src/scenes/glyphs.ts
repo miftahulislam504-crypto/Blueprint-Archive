@@ -5,7 +5,7 @@ import type { GlyphKind } from "@/data/projects";
  * Every sheet's centerpiece is a small piece of drafted line-art, not an
  * icon — literal line segments, like something a hand drew with a
  * straightedge. Each category below returns an array of [x, y] point pairs
- * in a local -1..1 space; ArchiveSheet scales/positions the result. Kept
+ * in a local -1..1 space; RibbonPanel scales/positions the result. Kept
  * as flat data (not JSX) so the same generator can build either a
  * THREE.BufferGeometry for the sheet or, in principle, be reused anywhere
  * else linework is needed.
