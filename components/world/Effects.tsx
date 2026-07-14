@@ -37,25 +37,31 @@ export function Effects() {
         mipmapBlur
       />
 
-      {quality !== 'low' && (
+      {quality !== 'low' ? (
         <ChromaticAberration
           offset={[0.0008, 0.0008]}
           radialModulation
           modulationOffset={0.5}
         />
+      ) : (
+        <></>
       )}
 
-      {quality === 'high' && (
+      {quality === 'high' ? (
         <SSAO
           blendFunction={BlendFunction.MULTIPLY}
           samples={16}
           rings={4}
           distanceThreshold={1.0}
         />
+      ) : (
+        <></>
       )}
 
-      {quality === 'high' && (
+      {quality === 'high' ? (
         <DepthOfField focusDistance={0.02} focalLength={0.05} bokehScale={2} height={480} />
+      ) : (
+        <></>
       )}
     </EffectComposer>
   );
