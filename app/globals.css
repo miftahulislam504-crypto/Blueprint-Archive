@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Tailwind v4 replaces tailwind.config.js with this CSS-first @theme block.
+   Add Crystal World's design tokens here as they're decided — e.g.
+   --color-crystal-core, --color-crystal-glow — rather than a JS config file. */
+@theme {
+  --color-crystal-core: #4b3f9e;
+  --color-crystal-glow: #5ce1ff;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #05030f;
+  overflow-x: hidden;
+}
+
+/* Used by LoadingScreen's spinner. */
+@keyframes crystal-world-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
