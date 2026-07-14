@@ -5,9 +5,38 @@ import { Html } from '@react-three/drei';
 
 const EMAIL = 'miftahulislam504@gmail.com';
 const GITHUB_URL = 'https://github.com/miftahulislam504-crypto';
+// Empty until real URLs exist — ContactLink below renders these dimmed
+// and unclickable rather than as dead links, so nothing looks broken to
+// an actual visitor in the meantime. Fill any of these in and that one
+// link switches itself on automatically, no other changes needed.
+const LINKEDIN_URL = '';
+const FACEBOOK_URL = '';
+const WHATSAPP_URL = ''; // e.g. https://wa.me/8801XXXXXXXXX
+const RESUME_URL = '';
 
 interface ContactIslandProps {
   position?: [number, number, number];
+}
+
+function ContactLink({ href, icon, label }: { href: string; icon: string; label: string }) {
+  const isReady = href.trim().length > 0;
+  return (
+    <a
+      href={isReady ? href : undefined}
+      target={isReady ? '_blank' : undefined}
+      rel={isReady ? 'noopener noreferrer' : undefined}
+      title={isReady ? undefined : 'Link coming soon'}
+      style={{
+        color: isReady ? '#5CE1FF' : 'rgba(232, 230, 255, 0.3)',
+        pointerEvents: isReady ? 'auto' : 'none',
+        cursor: isReady ? 'pointer' : 'default',
+        fontSize: 13,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {icon} {label}
+    </a>
+  );
 }
 
 const inputStyle: React.CSSProperties = {
@@ -59,20 +88,13 @@ export function ContactIsland({ position = [0, 0, -26] }: ContactIslandProps) {
           Crystal Portal
         </h2>
 
-        <div style={{ display: 'flex', gap: 10, marginBottom: 16, fontSize: 13 }}>
-          <a href={`mailto:${EMAIL}`} style={{ color: '#5CE1FF' }}>
-            Email
-          </a>
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: '#5CE1FF' }}
-          >
-            GitHub
-          </a>
-          {/* LinkedIn / Facebook / WhatsApp / Resume — no link on record,
-              add your own href here when ready. */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px 14px', marginBottom: 16 }}>
+          <ContactLink href={`mailto:${EMAIL}`} icon="📧" label="Email" />
+          <ContactLink href={GITHUB_URL} icon="🐙" label="GitHub" />
+          <ContactLink href={LINKEDIN_URL} icon="💼" label="LinkedIn" />
+          <ContactLink href={FACEBOOK_URL} icon="📘" label="Facebook" />
+          <ContactLink href={WHATSAPP_URL} icon="💬" label="WhatsApp" />
+          <ContactLink href={RESUME_URL} icon="📄" label="Resume" />
         </div>
 
         <form onSubmit={handleSubmit}>

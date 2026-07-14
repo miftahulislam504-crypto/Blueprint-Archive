@@ -37,7 +37,9 @@ export function AboutIsland({ position = [4, 0.5, 0] }: AboutIslandProps) {
         </p>
         <div style={{ fontSize: 12, opacity: 0.7, lineHeight: 1.6 }}>
           <div><strong>Based in:</strong> Sirajganj, Bangladesh</div>
-          <div><strong>Vision:</strong> {/* your vision statement here */}</div>
+          <div><strong>Vision:</strong> Turning engineering expertise and
+            self-taught code into tools people actually use — from
+            structural analysis software to 3D interactive portfolios.</div>
           <div><strong>Focus:</strong> Civil engineering + web development</div>
         </div>
       </div>

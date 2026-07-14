@@ -45,6 +45,12 @@ interface WorldState {
    *  subscriber re-rendering 60 times a second, which this avoids. */
   weatherCondition: WeatherCondition;
   setWeatherCondition: (condition: WeatherCondition) => void;
+
+  /** On by default — low cost, and most useful exactly when someone
+   *  might not think to look for a toggle yet (first time in explore
+   *  mode, unsure where things are). */
+  showMiniMap: boolean;
+  toggleMiniMap: () => void;
 }
 
 // 'mid' is the default until client-side detection runs once on mount —
@@ -75,4 +81,7 @@ export const useWorldStore = create<WorldState>((set) => ({
 
   weatherCondition: 'clear',
   setWeatherCondition: (condition) => set({ weatherCondition: condition }),
+
+  showMiniMap: true,
+  toggleMiniMap: () => set((s) => ({ showMiniMap: !s.showMiniMap })),
 }));

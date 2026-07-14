@@ -14,6 +14,7 @@ import { WeatherSystem } from '@/components/world/WeatherSystem';
 import { FloatingIsland } from '@/components/world/FloatingIsland';
 import { CrystalScatter } from '@/components/world/CrystalScatter';
 import { AboutIsland } from '@/components/islands/AboutIsland';
+import { HeroIsland } from '@/components/islands/HeroIsland';
 import { SkillsIsland } from '@/components/islands/SkillsIsland';
 import { ProjectsIsland } from '@/components/islands/ProjectsIsland';
 import { BlogIsland } from '@/components/islands/BlogIsland';
@@ -35,6 +36,8 @@ import { HUD } from '@/components/ui/HUD';
 import { TouchJoystick } from '@/components/ui/TouchJoystick';
 import { AudioManager } from '@/components/audio/AudioManager';
 import { PlayerAvatar } from '@/components/world/PlayerAvatar';
+import { MiniMapTracker } from '@/components/world/MiniMapTracker';
+import { MiniMap } from '@/components/ui/MiniMap';
 import { KeyboardMovementListener } from '@/components/input/KeyboardMovementListener';
 import { useWorldStore } from '@/stores/useWorldStore';
 
@@ -67,6 +70,7 @@ export default function Home() {
   const qualityDetected = useWorldStore((s) => s.qualityDetected);
   const cameraMode = useWorldStore((s) => s.cameraMode);
   const showStats = useWorldStore((s) => s.showStats);
+  const showMiniMap = useWorldStore((s) => s.showMiniMap);
 
   // WorldCanvas creates its WebGL context on mount, and options like
   // antialias can't be changed after that context exists — so we hold off
@@ -80,6 +84,9 @@ export default function Home() {
       <WorldCanvas>
         <LightingRig />
         <CameraRig />
+        {/* Tracks the camera regardless of cameraMode — feeds MiniMap,
+            a DOM overlay outside this Canvas. */}
+        <MiniMapTracker />
         {/* Only exists while cameraMode is 'explore' — CameraRig's own
             'explore' branch follows playerPosition regardless of whether
             this is mounted, but there's nothing for it to follow (beyond
@@ -113,6 +120,7 @@ export default function Home() {
         />
 
         <CrystalCore quality={quality} />
+        <HeroIsland />
         <Sparkle center={HERO_ISLAND_CENTER} radius={2.5} seed={51} />
 
         {/* Broad, subtle ambient field over the early-mid stretch — Dust
@@ -176,6 +184,7 @@ export default function Home() {
       {/* 2D DOM overlay, not 3D content — lives outside the Canvas same as ScrollSpacer. */}
       <HUD />
       <AudioManager />
+      {showMiniMap && <MiniMap />}
       {cameraMode === 'explore' && (
         <>
           <TouchJoystick />

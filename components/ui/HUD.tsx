@@ -28,6 +28,8 @@ export function HUD() {
   const toggleStats = useWorldStore((s) => s.toggleStats);
   const cameraMode = useWorldStore((s) => s.cameraMode);
   const setCameraMode = useWorldStore((s) => s.setCameraMode);
+  const showMiniMap = useWorldStore((s) => s.showMiniMap);
+  const toggleMiniMap = useWorldStore((s) => s.toggleMiniMap);
 
   return (
     <div
@@ -93,6 +95,18 @@ export function HUD() {
         title="Walk mode"
       >
         {cameraMode === 'explore' ? '🖱️' : '🚶'}
+      </button>
+
+      <button
+        style={buttonStyle}
+        onClick={() => {
+          audioEngine[showMiniMap ? 'playToggleOff' : 'playToggleOn']();
+          toggleMiniMap();
+        }}
+        aria-label="Toggle mini map"
+        title="Mini map"
+      >
+        🗺️
       </button>
 
       <button
