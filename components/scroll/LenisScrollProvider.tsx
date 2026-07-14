@@ -2,14 +2,10 @@
 
 import { useRef, useEffect } from 'react';
 import { ReactLenis } from 'lenis/react';
+import type { LenisRef } from 'lenis/react';
 import 'lenis/dist/lenis.css';
-import type Lenis from 'lenis';
 import gsap from 'gsap';
 import { useWorldStore } from '@/stores/useWorldStore';
-
-// The 'lenis' package (not the old @studio-freight/lenis) exposes this
-// shape via ref: { lenis: Lenis instance }.
-type LenisRefShape = { lenis?: Lenis };
 
 /**
  * Wrap the whole app with this once, in app/layout.tsx.
@@ -20,7 +16,7 @@ type LenisRefShape = { lenis?: Lenis };
  * gsap.ticker keeps everything on one clock.
  */
 export function LenisScrollProvider({ children }: { children: React.ReactNode }) {
-  const lenisRef = useRef<LenisRefShape>(null);
+  const lenisRef = useRef<LenisRef>(null);
 
   useEffect(() => {
     function update(time: number) {
