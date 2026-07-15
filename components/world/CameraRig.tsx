@@ -54,7 +54,15 @@ export function CameraRig() {
       // Frame-rate-independent smoothing: converges toward the target at
       // the same rate regardless of delta, unlike a fixed lerp factor
       // which would behave differently at 30fps vs 60fps.
-      const smoothing = 1 - Math.pow(0.0001, delta);
+      //
+      // Deliberately laggy (0.05 base, not 0.0001): if the camera snapped
+      // to "directly behind the player" every frame, turning would be
+      // invisible — the camera rotates with the player in lockstep, so
+      // pushing the stick sideways/backward always just looks like
+      // walking straight into the same view. Lagging the camera behind
+      // the player's rotation is what makes a turn actually read as a
+      // turn on screen.
+      const smoothing = 1 - Math.pow(0.05, delta);
       camera.position.lerp(desiredPos, smoothing);
 
       lookAtTarget.current.set(pos.x, pos.y + 1.2, pos.z);
