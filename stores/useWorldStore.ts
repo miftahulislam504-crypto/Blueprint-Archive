@@ -51,6 +51,21 @@ interface WorldState {
    *  mode, unsure where things are). */
   showMiniMap: boolean;
   toggleMiniMap: () => void;
+
+  /** Destination id from lib/world/destinations, or null when idle.
+   *  TeleportController (inside the Canvas) watches this and clears it
+   *  once the jump/scroll-animation it triggers has been started — it's
+   *  a one-shot request, not a persistent "current destination" field. */
+  teleportTarget: string | null;
+  requestTeleport: (destinationId: string) => void;
+  clearTeleportRequest: () => void;
+
+  /** True for the ~duration of a scroll-mode teleport's Lenis animation.
+   *  Purely cosmetic (HUD/portal button can show a brief "travelling"
+   *  state) — CameraRig doesn't need to branch on it, since it already
+   *  just follows scrollProgress regardless of what's driving it. */
+  isTeleporting: boolean;
+  setIsTeleporting: (v: boolean) => void;
 }
 
 // 'mid' is the default until client-side detection runs once on mount —
@@ -84,4 +99,11 @@ export const useWorldStore = create<WorldState>((set) => ({
 
   showMiniMap: true,
   toggleMiniMap: () => set((s) => ({ showMiniMap: !s.showMiniMap })),
+
+  teleportTarget: null,
+  requestTeleport: (destinationId) => set({ teleportTarget: destinationId }),
+  clearTeleportRequest: () => set({ teleportTarget: null }),
+
+  isTeleporting: false,
+  setIsTeleporting: (v) => set({ isTeleporting: v }),
 }));

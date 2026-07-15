@@ -2,6 +2,7 @@
 
 import { useWorldStore } from '@/stores/useWorldStore';
 import { audioEngine } from '@/lib/audio/AudioEngine';
+import { prefetchAvatarNow } from '@/components/world/AvatarPrefetch';
 
 const buttonStyle: React.CSSProperties = {
   width: 40,
@@ -86,6 +87,7 @@ export function HUD() {
 
       <button
         style={buttonStyle}
+        onPointerDown={prefetchAvatarNow}
         onClick={() => {
           const nextMode = cameraMode === 'explore' ? 'scroll' : 'explore';
           audioEngine[nextMode === 'explore' ? 'playToggleOn' : 'playToggleOff']();

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { QualityTierBootstrap } from '@/components/QualityTierBootstrap';
+import { SecretsBootstrap } from '@/components/SecretsBootstrap';
 import { LenisScrollProvider } from '@/components/scroll/LenisScrollProvider';
 
 export const metadata: Metadata = {
@@ -19,6 +20,10 @@ export default function RootLayout({
         {/* Runs once on mount, writes the detected quality tier into
             useWorldStore before any island/canvas reads it. */}
         <QualityTierBootstrap />
+        {/* Runs once on mount, hydrates useSecretsStore from
+            localStorage — see its own comment for why this can't just
+            happen in the store's initializer. */}
+        <SecretsBootstrap />
         <LenisScrollProvider>{children}</LenisScrollProvider>
       </body>
     </html>

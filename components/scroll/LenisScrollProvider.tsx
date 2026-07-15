@@ -6,6 +6,7 @@ import type { LenisRef } from 'lenis/react';
 import 'lenis/dist/lenis.css';
 import gsap from 'gsap';
 import { useWorldStore } from '@/stores/useWorldStore';
+import { lenisInstance } from '@/lib/scroll/lenisInstance';
 
 /**
  * Wrap the whole app with this once, in app/layout.tsx.
@@ -22,6 +23,9 @@ export function LenisScrollProvider({ children }: { children: React.ReactNode })
     function update(time: number) {
       const lenis = lenisRef.current?.lenis;
       if (!lenis) return;
+      // Cheap to reassign every tick and guarantees the holder is never
+      // left pointing at a stale/unmounted instance across route changes.
+      lenisInstance.instance = lenis;
       lenis.raf(time * 1000);
       // Read progress directly off the instance each tick, rather than
       // subscribing to lenis.on('scroll', ...) separately — that would

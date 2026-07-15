@@ -123,4 +123,9 @@ export function PlayerAvatar() {
   );
 }
 
-useGLTF.preload(MODEL_PATH);
+// No module-level useGLTF.preload() here anymore — see AvatarPrefetch,
+// which triggers this model's preload conditionally (on walk-mode button
+// interaction, or a short idle timeout) instead of unconditionally on
+// every page load. useGLTF itself still works exactly the same when this
+// component actually mounts either way; this only changes when the
+// download starts, not how it's loaded.
